@@ -14,6 +14,8 @@ var router = express.Router();
 
 router.get('/recipes', db.getAllRecipes);
 router.get('/recipe/:recipe_id', db.getRecipe);
+router.post('/recipe', db.saveRecipe);
+router.post('/ingredient', db.saveIngredient);
 
 app.use('/api', router);
 

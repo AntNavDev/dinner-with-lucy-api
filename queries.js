@@ -19,7 +19,7 @@ function getAllRecipes(req, res, next){
                 .json({
                     status: 'success',
                     data: data,
-                    message: 'Connection successful. Here are the recipes.'
+                    message: 'Success!'
                 });
         })
         .catch(function(err){
@@ -34,8 +34,40 @@ function getRecipe(req, res, next){
                 .json({
                     status: 'success',
                     data: data,
-                    message: 'Connection successful. Here is the recipe.'
+                    message: 'Success!'
                 });
+        })
+        .catch(function(err){
+            return next(err);
+        });
+}
+
+function saveRecipe(req, res, next){
+    // Should prolly validate data...
+    // ...but I didn't
+
+    // Insert into database
+    db.any('SELECT saveRecipe(${name}, ${ingredients})', {name: req.body.data.name, ingredients: req.body.data.ingredients})
+        .then(function(){
+            res.status(200)
+                .json({
+                    status: 'success',
+                    message: 'Recipe saved successfully.'
+                })
+        })
+        .catch(function(err){
+            return next(err);
+        });
+}
+
+function saveIngredient(req, res, next){
+    db.any('SELECT saveIngredient(${name}, ${caloric_info})', {name: req.body.data.name, caloric_info: req.body.data.caloric_info})
+        .then(function(){
+            res.status(200)
+                .json({
+                    status: 'success',
+                    message: 'Ingredient saved successfully.'
+                })
         })
         .catch(function(err){
             return next(err);
@@ -44,5 +76,7 @@ function getRecipe(req, res, next){
 
 module.exports = {
     getAllRecipes: getAllRecipes,
-    getRecipe : getRecipe
+    getRecipe : getRecipe,
+    saveRecipe: saveRecipe,
+    saveIngredient: saveIngredient
 };
